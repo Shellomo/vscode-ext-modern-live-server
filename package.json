@@ -2,7 +2,7 @@
   "name": "modern-live-server",
   "displayName": "⚡ Modern Live Server Pro",
   "description": "Next-generation live server with instant reload, WebSocket sync, and zero-config setup. Perfect for modern web development with React, Vue, or vanilla HTML/CSS/JS projects.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "publisher": "Shellomo",
   "engines": {
     "vscode": "^1.60.0"
