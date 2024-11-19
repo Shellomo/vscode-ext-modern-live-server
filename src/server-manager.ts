@@ -5,6 +5,7 @@ import * as WebSocket from 'ws';
 import * as path from 'path';
 import * as fs from 'fs';
 import chokidar from 'chokidar';
+import open from 'open';
 
 export class LiveServerManager {
     private server?: http.Server;
@@ -18,12 +19,40 @@ export class LiveServerManager {
     }
 
     private setupMiddleware(): void {
-        this.app.use(express.static(this.getWorkspaceRoot()));
+        const root = this.getWorkspaceRoot();
+        this.app.use(express.static(root));
 
+        // Serve index.html for root path
+        this.app.get('/', (req: Request, res: Response) => {
+            const indexPath = path.join(root, 'index.html');
+            if (fs.existsSync(indexPath)) {
+                res.send(this.injectLiveReloadScript(indexPath));
+            } else {
+                // Show directory listing if no index.html
+                fs.readdir(root, (err, files) => {
+                    if (err) {
+                        res.status(500).send('Error reading directory');
+                        return;
+                    }
+                    const htmlFiles = files.filter(f => f.endsWith('.html'));
+                    const fileList = htmlFiles.map(f =>
+                        `<li><a href="/${f}">${f}</a></li>`
+                    ).join('');
+                    res.send(`
+                        <h1>Available HTML Files:</h1>
+                        <ul>${fileList}</ul>
+                    `);
+                });
+            }
+        });
+
+        // Handle other HTML files
         this.app.get('*', (req: Request, res: Response) => {
             if (req.url.endsWith('.html')) {
-                const filePath = path.join(this.getWorkspaceRoot(), req.url);
-                res.send(this.injectLiveReloadScript(filePath));
+                const filePath = path.join(root, req.url);
+                if (fs.existsSync(filePath)) {
+                    res.send(this.injectLiveReloadScript(filePath));
+                }
             }
         });
     }
@@ -58,6 +87,7 @@ export class LiveServerManager {
         }
 
         const port = this.getPort();
+        const root = this.getWorkspaceRoot();
 
         this.server = http.createServer(this.app);
         this.wss = new WebSocket.Server({ server: this.server });
@@ -68,7 +98,19 @@ export class LiveServerManager {
         });
 
         this.startFileWatcher();
-        vscode.window.showInformationMessage(`Live Server is running on port ${port}`);
+
+        // Open default browser
+        const url = `http://localhost:${port}`;
+        // await open(url);
+
+        vscode.window.showInformationMessage(
+            `Live Server running at ${url}`,
+            'Open in Browser'
+        ).then(selection => {
+            if (selection === 'Open in Browser') {
+                open(url);
+            }
+        });
     }
 
     private startFileWatcher(): void {
