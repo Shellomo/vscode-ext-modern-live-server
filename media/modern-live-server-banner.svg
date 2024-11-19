@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1E1E3F"/>
+      <stop offset="100%" style="stop-color:#2B2B5C"/>
+    </linearGradient>
+    
+    <!-- Glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="320" fill="url(#bg-gradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="160" cy="160" r="120" fill="none" stroke="#9D71F7" stroke-width="2" opacity="0.1"/>
+  <circle cx="160" cy="160" r="90" fill="none" stroke="#B992F9" stroke-width="2" opacity="0.15"/>
+  <circle cx="160" cy="160" r="60" fill="none" stroke="#D4B3FB" stroke-width="2" opacity="0.2"/>
+  
+  <!-- Central icon -->
+  <g transform="translate(80, 80) scale(0.8)">
+    <circle cx="100" cy="100" r="60" fill="#2B2B5C"/>
+    <path d="M100 60 A40 40 0 0 1 140 100" fill="none" stroke="#9D71F7" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100 70 A30 30 0 0 1 130 100" fill="none" stroke="#B992F9" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100 80 A20 20 0 0 1 120 100" fill="none" stroke="#D4B3FB" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="100" cy="100" r="8" fill="#FFD700"/>
+    <path d="M94 88 L104 88 L100 108 L108 108 L90 132 L94 112 L86 112 Z" fill="#FFD700"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="280" y="140" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#FFFFFF" filter="url(#glow)">
+    Modern Live Server
+  </text>
+  <text x="280" y="190" font-family="Arial, sans-serif" font-size="24" fill="#B992F9">
+    Next-Generation Development Server
+  </text>
+  
+  <!-- Feature points -->
+  <g fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18">
+    <text x="280" y="240">⚡ Instant Live Reload</text>
+    <text x="480" y="240">🔄 WebSocket Sync</text>
+    <text x="680" y="240">⚙️ Zero Configuration</text>
+  </g>
+</svg>

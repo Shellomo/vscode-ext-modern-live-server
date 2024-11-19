@@ -1,12 +1,33 @@
 {
-  "name": "live-server",
-  "displayName": "Live Server",
-  "description": "Launch a development local Server with live reload",
+  "name": "modern-live-server",
+  "displayName": "⚡ Modern Live Server Pro",
+  "description": "Next-generation live server with instant reload, WebSocket sync, and zero-config setup. Perfect for modern web development with React, Vue, or vanilla HTML/CSS/JS projects.",
   "version": "1.0.0",
+  "publisher": "Shellomo",
   "engines": {
     "vscode": "^1.60.0"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other",
+    "Development Tools",
+    "Debuggers"
+  ],
+  "keywords": [
+    "live server",
+    "live reload",
+    "web server",
+    "development server",
+    "hot reload",
+    "local server",
+    "static server",
+    "websocket",
+    "dev tools",
+    "preview"
+  ],
+  "galleryBanner": {
+    "color": "#2B2B5C",
+    "theme": "dark"
+  },
   "activationEvents": [
     "onCommand:live-server.start",
     "onCommand:live-server.stop"
@@ -34,27 +55,44 @@
     "commands": [
       {
         "command": "live-server.start",
-        "title": "Live Server: Start Server"
+        "title": "Modern Live Server: Start Server"
       },
       {
         "command": "live-server.stop",
-        "title": "Live Server: Stop Server"
+        "title": "Modern Live Server: Stop Server"
       }
     ],
     "configuration": {
-      "title": "Live Server",
+      "title": "Modern Live Server",
       "properties": {
         "liveServer.port": {
           "type": "number",
           "default": 4444,
-          "description": "Set custom port"
+          "description": "Set custom port for the live server"
         },
         "liveServer.root": {
           "type": "string",
           "default": "/",
-          "description": "Set custom root directory"
+          "description": "Set custom root directory for serving files"
+        },
+        "liveServer.autoOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically open browser when server starts"
         }
       }
     }
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/badge/Install-Now-blue.svg",
+      "href": "https://marketplace.visualstudio.com/items?itemName=YourPublisherName.modern-live-server",
+      "description": "Install Modern Live Server"
+    }
+  ],
+  "icon": "media/modern-live-server-icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shellomo/vscode-ext-modern-live-server"
   }
 }
