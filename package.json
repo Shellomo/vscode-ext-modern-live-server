@@ -9,7 +9,6 @@
   },
   "categories": [
     "Other",
-    "Development Tools",
     "Debuggers"
   ],
   "keywords": [
@@ -28,10 +27,7 @@
     "color": "#2B2B5C",
     "theme": "dark"
   },
-  "activationEvents": [
-    "onCommand:live-server.start",
-    "onCommand:live-server.stop"
-  ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
