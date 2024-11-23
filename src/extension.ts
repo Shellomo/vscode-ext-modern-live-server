@@ -4,69 +4,91 @@ import { StatusBarUi } from './status-bar';
 import { TelemetryService } from './telemetry';
 
 export function activate(context: vscode.ExtensionContext) {
-    // Add debug logging
-    console.log('Activating Modern Live Server extension...');
+    let serverManager: LiveServerManager;
+    let statusBarUi: StatusBarUi;
+    let telemetry: TelemetryService;
 
     try {
-        const serverManager = new LiveServerManager();
-        const statusBarUi = new StatusBarUi();
-        const telemetry = TelemetryService.getInstance(context);
+        serverManager = new LiveServerManager();
+        statusBarUi = new StatusBarUi();
+        telemetry = TelemetryService.getInstance(context);
 
-        console.log('Created extension instances successfully');
-
-        // Track activation
-        telemetry.sendActivationEvent();
-
+        // Register start server command
         let startServer = vscode.commands.registerCommand('live-server.start', async () => {
-            console.log('Executing live-server.start command...');
             try {
                 const startTime = Date.now();
-                await serverManager.startServer();
-                statusBarUi.updating(true);
+                const port = serverManager.getPort();
 
-                console.log('Server started successfully');
-                telemetry.sendServerStartEvent(true, serverManager.getPort());
+                // Show starting notification
+                const notification = vscode.window.withProgress({
+                    location: vscode.ProgressLocation.Notification,
+                    title: "Starting Live Server...",
+                    cancellable: false
+                }, async (progress) => {
+                    progress.report({ increment: 0 });
+                    await serverManager.startServer();
+                    return true;
+                });
+
+                await notification;
+                statusBarUi.updating(true, port);
+
+                telemetry.sendServerStartEvent(true, port);
             } catch (err) {
-                console.error('Failed to start server:', err);
+                const error = err as Error;
                 telemetry.sendServerStartEvent(false, serverManager.getPort());
-                telemetry.sendError('serverStart', err as Error);
+                telemetry.sendError('serverStart', error);
 
-                // Show error to user
-                // @ts-ignore
-                vscode.window.showErrorMessage(`Failed to start Live Server: ${err.message}`);
+                vscode.window.showErrorMessage(`Failed to start Live Server: ${error.message}`, 'Try Different Port')
+                    .then(selection => {
+                        if (selection === 'Try Different Port') {
+                            vscode.commands.executeCommand('workbench.action.openSettings', 'liveServer.port');
+                        }
+                    });
             }
         });
 
+        // Register stop server command
         let stopServer = vscode.commands.registerCommand('live-server.stop', async () => {
-            console.log('Executing live-server.stop command...');
             try {
                 const startTime = Date.now();
-                await serverManager.stopServer();
+
+                const notification = vscode.window.withProgress({
+                    location: vscode.ProgressLocation.Notification,
+                    title: "Stopping Live Server...",
+                    cancellable: false
+                }, async (progress) => {
+                    progress.report({ increment: 0 });
+                    await serverManager.stopServer();
+                    return true;
+                });
+
+                await notification;
                 statusBarUi.updating(false);
 
-                console.log('Server stopped successfully');
                 telemetry.sendServerStopEvent(true, Date.now() - startTime);
             } catch (err) {
-                console.error('Failed to stop server:', err);
+                const error = err as Error;
                 telemetry.sendServerStopEvent(false, 0);
-                telemetry.sendError('serverStop', err as Error);
-
-                // Show error to user
-                // @ts-ignore
-                vscode.window.showErrorMessage(`Failed to stop Live Server: ${err.message}`);
+                telemetry.sendError('serverStop', error);
+                vscode.window.showErrorMessage(`Failed to stop Live Server: ${error.message}`);
             }
         });
 
-        context.subscriptions.push(startServer, stopServer);
-        console.log('Commands registered successfully');
+        // Register open browser command
+        let openBrowser = vscode.commands.registerCommand('live-server.openBrowser', () => {
+            const port = serverManager.getPort();
+            const url = `http://localhost:${port}`;
+            vscode.env.openExternal(vscode.Uri.parse(url));
+        });
+
+        context.subscriptions.push(startServer, stopServer, openBrowser, statusBarUi);
     } catch (err) {
-        console.error('Failed to activate extension:', err);
-        // @ts-ignore
-        vscode.window.showErrorMessage(`Failed to activate Modern Live Server: ${err.message}`);
+        const error = err as Error;
+        vscode.window.showErrorMessage(`Failed to activate Live Server: ${error.message}`);
     }
 }
 
 export function deactivate() {
-    console.log('Deactivating Modern Live Server extension...');
     TelemetryService.getInstance(null as any).dispose();
 }
