@@ -1,8 +1,8 @@
 # Modern Live Server for VS Code 🚀
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Downloads](https://img.shields.io/badge/downloads-new-green)
-![Rating](https://img.shields.io/badge/rating-5%20stars-yellow)
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/Shellomo.modern-live-server)
+![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/Shellomo.modern-live-server)
+![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/stars/Shellomo.modern-live-server)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ![Banner](media/modern-live-server-banner.png)
