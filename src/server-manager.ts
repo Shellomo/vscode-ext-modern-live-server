@@ -65,7 +65,7 @@ export class LiveServerManager {
         return workspaceFolders[0].uri.fsPath;
     }
 
-    private getPort(): number {
+    public getPort(): number {
         const config = vscode.workspace.getConfiguration('liveServer');
         return config.get('port', 5500);
     }
