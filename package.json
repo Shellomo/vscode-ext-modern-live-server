@@ -2,7 +2,7 @@
   "name": "modern-live-server",
   "displayName": "⚡ Modern Live Server Pro",
   "description": "Next-generation live server with instant reload, WebSocket sync, and zero-config setup. Perfect for modern web development with React, Vue, or vanilla HTML/CSS/JS projects.",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "publisher": "Shellomo",
   "engines": {
     "vscode": "^1.60.0"
@@ -61,15 +61,19 @@
   ],
   "main": "./dist/extension.js",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack --mode development",
+    "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "chokidar": "^3.5.3",
     "express": "^4.18.2",
     "ws": "^8.11.0",
-    "@vscode/extension-telemetry": "^0.9.8"
+    "@vscode/extension-telemetry": "^0.9.8",
+    "open": "^8.0.4",
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^6.0.3"
   },
   "devDependencies": {
     "@types/node": "^16.x",
@@ -77,9 +81,19 @@
     "@types/express": "^4.17.17",
     "@types/ws": "^8.5.5",
     "typescript": "^4.9.5",
-    "open": "^8.0.4",
-    "@vscode/extension-telemetry": "^0.9.8"
+    "@types/body-parser": "^1.19.5",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "ts-loader": "^9.5.1"
   },
+  "bundledDependencies": [
+    "@vscode/extension-telemetry",
+    "body-parser",
+    "chokidar",
+    "express",
+    "ws",
+    "open"
+  ],
   "contributes": {
     "commands": [
       {
@@ -115,7 +129,7 @@
   "badges": [
     {
       "url": "https://img.shields.io/badge/Install-Now-blue.svg",
-      "href": "https://marketplace.visualstudio.com/items?itemName=YourPublisherName.modern-live-server",
+      "href": "https://marketplace.visualstudio.com/items?itemName=Shellomo.modern-live-server",
       "description": "Install Modern Live Server"
     }
   ],
@@ -123,5 +137,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Shellomo/vscode-ext-modern-live-server"
-  }
+  },
+  "bundleDependencies": [
+    "@vscode/extension-telemetry",
+    "body-parser",
+    "chokidar",
+    "express",
+    "ws",
+    "open"
+  ]
 }
